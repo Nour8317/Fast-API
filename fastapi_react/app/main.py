@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .database import session, engine
-
+from .database import SessionLocal, engine
+from app.routers import transactions
 app = FastAPI()
 
 origins = ["http://localhost:3000"]
@@ -12,11 +12,4 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-def get_db():
-    db = session()
-    try:
-        yield db
-    finally:
-        db.close()  
-
-
+app.include_router(transactions.router)
